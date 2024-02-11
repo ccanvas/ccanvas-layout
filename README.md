@@ -110,8 +110,8 @@ let mut new_layout = Layout::single(Some(solid1), Some(Border::new(Colour::White
 // add a new bordered component to the right of [] (solid1)
 new_layout.add_bordered_component_right(
     &[],
-    Constraint::new(ConstraintVariant::percentage(50), None, None),
-    Constraint::new(ConstraintVariant::percentage(50), None, None),
+    ConstraintVariant::percentage(50).into(),
+    ConstraintVariant::percentage(50).into(),
     solid2,
     Border::new(Colour::White, BorderType::Normal),
 );
@@ -119,8 +119,8 @@ new_layout.add_bordered_component_right(
 // add a new bordered component to the right of [Right] (solid2)
 new_layout.add_bordered_component_below(
     &[Direction::Right],
-    Constraint::new(ConstraintVariant::percentage(50), None, None),
-    Constraint::new(ConstraintVariant::percentage(50), None, None),
+    ConstraintVariant::percentage(50).into(),
+    ConstraintVariant::percentage(50).into(),
     solid3,
     Border::new(Colour::White, BorderType::Normal),
 );
