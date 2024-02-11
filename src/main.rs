@@ -19,8 +19,7 @@ async fn main() {
         Subscription::specific_message_tag("!layout-add".to_string()).into(),
         Subscription::specific_message_tag("!layout-set".to_string()).into(),
         Subscription::specific_message_tag("!layout-remove".to_string()).into(),
-        // Subscription::AllMessages.into(),
-        Subscription::ScreenResize.into(),
+        Subscription::ScreenResize.with_priority(100),
         Subscription::Focused.with_priority(50),
     ]);
 

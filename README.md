@@ -51,11 +51,15 @@ For example, `{ base: 50%, offset_neg: 5px }` creates an item that centres on sc
 |<-- 50% - 5px -->|<- 10px ->|<-- 50% - 5px -->|
 ```
 
-As for how it makes the components only render in their own respective area, check the explaination in [`libccanvas/layout`](https://github.com/ccanvas/libccanvas/tree/master/src/features/layout).
+As for how it makes the components only render in their own respective area, check the explanation in [`libccanvas/layout`](https://github.com/ccanvas/libccanvas/tree/master/src/features/layout).
 
 ## Usage
 
 Make sure the feature `layout` is enabled for `libccanvas`.
+
+Use `client.spawn_layouted()` to load a component to be used in a layout, otherwise, use `client.spawn().`
+
+`client.spawn_layouted()` will have no effect on components without `layout` support, read [`libccanvas/layout`](https://github.com/ccanvas/libccanvas/tree/master/src/features/layout) for more info.
 
 ```rs
 let (layout_discrim, solid1, solid2, solid3, _) = tokio::join!(
@@ -100,39 +104,25 @@ loop {
 
 // create a new layout with solid1 as its component
 // also give it some white borders because it looks nice
+// the path of solid1 is [] (root)
 let mut new_layout = Layout::single(Some(solid1), Some(Border::new(Colour::White, BorderType::Normal)));
 
-
-new_layout.add(
-    // the first argument specifies where do you want to add the new window in
-    // here we add it at [] - meaning the new window will be in the top level split
+// add a new bordered component to the right of [] (solid1)
+new_layout.add_bordered_component_right(
     &[],
-    // the second argument tells us how [] will be splitted
-    // Direction::Right means it will be a vertical split
-    // and the new window will be to the right of the []
-    // so the new path to this window will be [] + Right = [Right]
-    &Direction::Right,
-    // 50% constraint to the left
     Constraint::new(ConstraintVariant::percentage(50), None, None),
-    // 50% constraint to the right
     Constraint::new(ConstraintVariant::percentage(50), None, None),
-    // specify the component
-    Some(solid2),
-    // specify the border style
-    Some(Border::new(Colour::White, BorderType::Normal)),
+    solid2,
+    Border::new(Colour::White, BorderType::Normal),
 );
 
-new_layout.add(
-    // now, this splits the screen containing solid2
-    // as shown above, solid2 has path of [Right]
+// add a new bordered component to the right of [Right] (solid2)
+new_layout.add_bordered_component_below(
     &[Direction::Right],
-    // horizontal split, the new window will be below solid2
-    // the new path of this window is [Right] + Down = [Right, Down]
-    &Direction::Down,
     Constraint::new(ConstraintVariant::percentage(50), None, None),
     Constraint::new(ConstraintVariant::percentage(50), None, None),
-    Some(solid3),
-    Some(Border::new(Colour::White, BorderType::Normal)),
+    solid3,
+    Border::new(Colour::White, BorderType::Normal),
 );
 
 // finally, send the request to set layout as the current configuration
